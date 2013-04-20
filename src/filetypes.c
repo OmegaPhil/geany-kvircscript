@@ -510,6 +510,13 @@ static void init_builtin_filetypes(void)
 	ft->name = g_strdup("Abaqus");
 	filetype_make_title(ft, TITLE_SOURCE_FILE);
 	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
+
+#define KVIRC
+	ft = filetypes[GEANY_FILETYPES_KVIRC];
+	ft->lang = 45;
+	ft->name = g_strdup("KVIrc");
+    ft->title = g_strdup("KVIrc Script");
+	ft->group = GEANY_FILETYPE_GROUP_SCRIPT;
 }
 
 

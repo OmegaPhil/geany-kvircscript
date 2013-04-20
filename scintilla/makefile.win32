@@ -71,6 +71,7 @@ LexCOBOL.o \
 LexCSS.o \
 LexCPP.o \
 LexHTML.o \
+LexKVIrc.o \
 LexOthers.o \
 LexPascal.o \
 LexPerl.o \
