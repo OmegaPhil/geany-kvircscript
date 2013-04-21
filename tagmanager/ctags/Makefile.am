@@ -28,6 +28,7 @@ parsers = \
 	haxe.c \
 	html.c \
 	js.c \
+	kvirc.c \
 	latex.c \
 	lregex.c \
 	lua.c \

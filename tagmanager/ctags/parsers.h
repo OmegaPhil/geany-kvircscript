@@ -59,7 +59,8 @@
     CobolParser, \
     ObjcParser, \
     AsciidocParser, \
-    AbaqusParser
+    AbaqusParser, \
+    KVIrcParser
 /*
 langType of each parser
  0	CParser
@@ -107,6 +108,7 @@ langType of each parser
 42	ObjcParser
 43  AsciidocParser
 44	AbaqusParser
+45  KVIrcParser
 */
 #endif	/* _PARSERS_H */
 

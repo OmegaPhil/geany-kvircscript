@@ -83,6 +83,7 @@ ctags_sources = set([
     'tagmanager/ctags/html.c',
     'tagmanager/ctags/js.c',
     'tagmanager/ctags/keyword.c',
+    'tagmanager/ctags/kvirc.c',
     'tagmanager/ctags/latex.c',
     'tagmanager/ctags/lregex.c',
     'tagmanager/ctags/lua.c',
