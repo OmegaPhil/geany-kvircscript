@@ -809,27 +809,21 @@ static const HLKeyword highlighting_keywords_JS[] =
 static const HLStyle highlighting_styles_KVIRC[] =
 {
 	{ SCE_KVIRC_DEFAULT,	"default",			FALSE },
-	{ SCE_KVIRC_COMMENT,	"commentline",		FALSE }
-/*	{ SCE_P_NUMBER,			"number",			FALSE },
-	{ SCE_P_STRING,			"string",			FALSE },
-	{ SCE_P_CHARACTER,		"character",		FALSE },
-	{ SCE_P_WORD,			"word",				FALSE },
-	{ SCE_P_TRIPLE,			"triple",			FALSE },
-	{ SCE_P_TRIPLEDOUBLE,	"tripledouble",		FALSE },
-	{ SCE_P_CLASSNAME,		"classname",		FALSE },
-	{ SCE_P_DEFNAME,		"defname",			FALSE },
-	{ SCE_P_OPERATOR,		"operator",			FALSE },
-	{ SCE_P_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_P_WORD2,			"word2",			FALSE },
-	{ SCE_P_DECORATOR,		"decorator",		FALSE }
-*/
+	{ SCE_KVIRC_COMMENT,	"commentline",		FALSE },
+	{ SCE_KVIRC_COMMENTBLOCK,"commentblock",	FALSE },
+	{ SCE_KVIRC_STRING,		"string",			FALSE },
+	{ SCE_KVIRC_WORD,		"default",			FALSE },
+	{ SCE_KVIRC_KEYWORD,	"word",				FALSE },
+	{ SCE_KVIRC_FUNCTION_KEYWORD,"function",	FALSE },
+	{ SCE_KVIRC_FUNCTION,	"type",				FALSE },
+	{ SCE_KVIRC_VARIABLE,	"identifier",		FALSE },
+	{ SCE_KVIRC_NUMBER,		"number",			FALSE },
+	{ SCE_KVIRC_OPERATOR,	"operator",			FALSE }
 };
 static const HLKeyword highlighting_keywords_KVIRC[] =
 {
-	{ 0, "primary",		FALSE }
-	//{ 1, "identifiers",	FALSE }
+	{ 0, "primary",				FALSE },
+	{ 1, "function_keywords",	FALSE }
 };
 #define highlighting_properties_KVIRC	EMPTY_PROPERTIES
 

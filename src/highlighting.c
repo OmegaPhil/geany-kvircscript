@@ -1570,6 +1570,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_STRING);
+
+		case SCLEX_KVIRC:
+			return (style == SCE_KVIRC_STRING);
 	}
 	return FALSE;
 }
@@ -1715,6 +1718,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_ASM_COMMENT ||
 				style == SCE_ASM_COMMENTBLOCK ||
 				style == SCE_ASM_COMMENTDIRECTIVE);
+
+		case SCLEX_KVIRC:
+			return (style == SCE_KVIRC_COMMENT ||
+				style == SCE_KVIRC_COMMENTBLOCK);
 	}
 	return FALSE;
 }
