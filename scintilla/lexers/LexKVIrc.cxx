@@ -316,7 +316,7 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
     if ( styler.GetPropertyInt("fold") == 0 )
         return;
 
-    /* Obtaining current line */
+    /* Obtaining current line number*/
     int currentLine = styler.GetLine(startPos);
 
     /* Obtaining starting character - indentation is done on a line basis,
@@ -326,8 +326,8 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
     /* Initialising current level - this is defined as indentation level
      * in the low 12 bits, with flag bits in the upper four bits.
      * It looks like two indentation states are maintained in the returned
-     * value - 'nextLevel' in the most-significant bits, 'currentLevel'
-     * in the least significant bits. Since the next level is the most
+     * 32bit value - 'nextLevel' in the most-significant bits, 'currentLevel'
+     * in the least-significant bits. Since the next level is the most
      * up to date, this must refer to the current state of indentation.
      * So the code bitshifts the old current level out of existence to
      * get at the actual current state of indentation
@@ -340,18 +340,29 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
     // Looping for characters in range
     for (unsigned int i = safeStartPos; i < startPos + length; ++i)
     {
-        // Fetching current character
-        //char ch = styler.SafeGetCharAt(i);
+        /* Folding occurs after syntax highlighting, meaning Scintilla
+         * already knows where the comments are
+         * Fetching the current state */
+        int state = styler.StyleAt(i) & 31;
 
-        //
         switch( styler.SafeGetCharAt(i) )
         {
             case '{':
-                ++nextLevel;
+
+                /* Indenting only when the braces are not contained in
+                 * a comment */
+                if (state != SCE_KVIRC_COMMENT &&
+                    state != SCE_KVIRC_COMMENTBLOCK)
+                    ++nextLevel;
                 break;
 
             case '}':
-                --nextLevel;
+
+                /* Outdenting only when the braces are not contained in
+                 * a comment */
+                if (state != SCE_KVIRC_COMMENT &&
+                    state != SCE_KVIRC_COMMENTBLOCK)
+                    --nextLevel;
                 break;
 
             case '\n':
@@ -376,17 +387,16 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
                 currentLevel = nextLevel;
                 break;
         }
-
     }
 
     /* At this point the data has ended, so presumably the end of the line?
-     * Preparing indentation information to return - combining
-     * current and next level data */
+     * Preparing indentation information to return - combining current
+     * and next level data */
     int lev = currentLevel | nextLevel << 16;
 
-    /* If the next level increases the indent level, mark the
-     * current line as a fold point - current level data is
-     * in the least significant bits */
+    /* If the next level increases the indent level, mark the current
+     * line as a fold point - current level data is in the least
+     * significant bits */
     if (nextLevel > currentLevel )
         lev |= SC_FOLDLEVELHEADERFLAG;
 
