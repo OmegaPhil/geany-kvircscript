@@ -3,7 +3,8 @@
  ** Lexer for KVIrc script.
  **/
 // Copyright 2013 by OmegaPhil <OmegaPhil+scintilla@gmail.com>, based in
-// part from LexPython, Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// part from LexPython Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// and LexCmake Copyright 2007 by Cristian Adam <cristian [dot] adam [at] gmx [dot] net>
 
 // The License.txt file describes the conditions under which this software may be distributed.
 
@@ -309,7 +310,89 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
 static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - unused*/,
                       WordList *[], Accessor &styler)
 {
-    // TODO
+    /* Based on CMake's folder */
+    
+    /* Exiting if folding isnt enabled */
+    if ( styler.GetPropertyInt("fold") == 0 )
+        return;
+
+    /* Obtaining current line */
+    int currentLine = styler.GetLine(startPos);
+
+    /* Obtaining starting character - indentation is done on a line basis,
+     * not character */
+    unsigned int safeStartPos = styler.LineStart( currentLine );
+
+    /* Initialising current level - this is defined as indentation level
+     * in the low 12 bits, with flag bits in the upper four bits.
+     * It looks like two indentation states are maintained in the returned
+     * value - 'nextLevel' in the most-significant bits, 'currentLevel'
+     * in the least significant bits. Since the next level is the most
+     * up to date, this must refer to the current state of indentation.
+     * So the code bitshifts the old current level out of existence to
+     * get at the actual current state of indentation
+     * Based on the LexerCPP.cxx line 958 comment */
+    int currentLevel = SC_FOLDLEVELBASE;
+    if (currentLine > 0)
+        currentLevel = styler.LevelAt(currentLine - 1) >> 16;
+    int nextLevel = currentLevel;
+
+    // Looping for characters in range
+    for (unsigned int i = safeStartPos; i < startPos + length; ++i)
+    {
+        // Fetching current character
+        //char ch = styler.SafeGetCharAt(i);
+
+        //
+        switch( styler.SafeGetCharAt(i) )
+        {
+            case '{':
+                ++nextLevel;
+                break;
+
+            case '}':
+                --nextLevel;
+                break;
+
+            case '\n':
+            case '\r':
+
+                /* Preparing indentation information to return - combining
+                 * current and next level data */
+                int lev = currentLevel | nextLevel << 16;
+
+                /* If the next level increases the indent level, mark the
+                 * current line as a fold point - current level data is
+                 * in the least significant bits */
+                if (nextLevel > currentLevel )
+                    lev |= SC_FOLDLEVELHEADERFLAG;
+
+                /* Updating indentation level if needed */
+                if (lev != styler.LevelAt(currentLine))
+                    styler.SetLevel(currentLine, lev);
+
+                /* Updating variables */
+                ++currentLine;
+                currentLevel = nextLevel;
+                break;
+        }
+
+    }
+
+    /* At this point the data has ended, so presumably the end of the line?
+     * Preparing indentation information to return - combining
+     * current and next level data */
+    int lev = currentLevel | nextLevel << 16;
+
+    /* If the next level increases the indent level, mark the
+     * current line as a fold point - current level data is
+     * in the least significant bits */
+    if (nextLevel > currentLevel )
+        lev |= SC_FOLDLEVELHEADERFLAG;
+
+    /* Updating indentation level if needed */
+    if (lev != styler.LevelAt(currentLine))
+        styler.SetLevel(currentLine, lev);
 }
 
 /* Registering wordlists */
