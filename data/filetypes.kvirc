@@ -62,7 +62,20 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=
+
+# Do not use this - doesnt allow a working directory to be set, so doesnt
+# allow for a wrapper script somewhere else to run (cant just generate a
+# full path to the current file...)
+#compiler='/mnt/Storage_1/Desktop Files/Linux Programming/Bash Scripts/kvirc_script_loader.bash' "%f"
+#run_cmd=
+
+[build-menu]
+# Note the stupid hyphen rather than underscore!!
+
+FT_00_LB=Load Script
 
 # TODO: User needs to configure this as appropriate
-run_cmd='/mnt/Storage_1/Desktop Files/Linux Programming/Bash Scripts/kvirc_script_loader.bash' "%f"
+FT_00_CM="/mnt/Storage_1/Desktop Files/Linux Programming/Bash Scripts/kvirc_script_loader.bash" "%f"
+
+# Do not speechmark-delimit this, looks like geany already does this
+FT_00_WD=%d
