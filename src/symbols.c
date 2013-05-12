@@ -977,6 +977,15 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_KVIRC:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Aliases"), "classviewer-method",
+				&(tv_iters.tag_namespace), _("Events"), "classviewer-other",
+				&(tv_iters.tag_variable), _("Global Variables"), "classviewer-var",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
