@@ -167,7 +167,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                      * moved forward, yet the new current character
                      * has yet to be defined - loop without moving
                      * forward again */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
@@ -190,7 +190,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                      * moved forward, yet the new current character
                      * has yet to be defined - loop without moving
                      * forward again */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
@@ -218,7 +218,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     /* Word has been exited yet the current character
                      * has yet to be defined - loop without moving
                      * forward again */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
@@ -234,7 +234,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     /* Number has been exited yet the current character
                      * has yet to be defined - loop without moving
                      * forward */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
@@ -250,7 +250,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     /* Operator has been exited yet the current character
                      * has yet to be defined - loop without moving
                      * forward */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
@@ -295,7 +295,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     /* Word has been exited yet the current character
                      * has yet to be defined - loop without moving
                      * forward again */
-                    next = 0;
+                    next = false;
                     break;
                 }
 
