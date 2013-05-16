@@ -242,18 +242,16 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
 
             case SCE_KVIRC_OPERATOR:
 
-                // Detecting the end of an operator
-                if (!isoperator(sc.ch))
-                {
-                    sc.SetState(SCE_KVIRC_DEFAULT);
+                /* Because '%' is an operator but is also the marker for
+                 * a variable, I need to always treat operators as single
+                 * character strings and therefore redo their detection
+                 * after every character */
+                sc.SetState(SCE_KVIRC_DEFAULT);
 
-                    /* Operator has been exited yet the current character
-                     * has yet to be defined - loop without moving
-                     * forward */
-                    next = false;
-                    break;
-                }
-
+                /* Operator has been exited yet the current character
+                 * has yet to be defined - loop without moving
+                 * forward */
+                next = false;
                 break;
 
             case SCE_KVIRC_WORD:
