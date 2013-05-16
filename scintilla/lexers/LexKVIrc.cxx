@@ -61,11 +61,11 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
     /* Looping for all characters - only automatically moving forward
      * when asked for (transitions leaving strings and keywords do this
      * already) */
-    bool next;
-    for( next = 1; sc.More(); next ? sc.Forward() : (void)0 )
+    bool next = true;
+    for( ; sc.More(); next ? sc.Forward() : (void)0 )
     {
         /* Resetting next */
-        next = 1;
+        next = true;
 
         /* Dealing with different states */
         switch (sc.state)
