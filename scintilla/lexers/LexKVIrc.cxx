@@ -124,7 +124,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     break;
                 }
 
-                // Detecting words
+                /* Detecting words */
                 if (IsAWordStart(sc.ch) && IsAWordChar(sc.chNext))
                 {
                     sc.SetState(SCE_KVIRC_WORD);
