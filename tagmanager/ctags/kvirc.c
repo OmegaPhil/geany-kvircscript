@@ -78,7 +78,7 @@ static const char *parseIdentifier (const char *cp,
 static void findKVIrcTags (void)
 {
     /* Preparing vStrings */
-    vString *const name = vStringNew ();
+    vString *name = vStringNew ();
     vString *const aliasName = vStringNew ();
     vString *const handlerName = vStringNew ();
     vString *const marker = vStringNewInit ( "*" );  // Used for global variables
@@ -184,6 +184,18 @@ static void findKVIrcTags (void)
              * tags - events have two spaces appended */
             vStringCatS( name, "  " );
 
+            /* If the event is a numeric event, the handler name tag
+             * fails to be added to it - hacking in '_' to
+             * ensure the event tag is not considered a number.
+             * Interestingly a full stop does not work */
+            if ( isdigit(vStringItem( name, 0 )) )
+            {
+                vString* tmp = name;
+                name = vStringNewInit( "_" );
+                vStringCat( name, tmp );
+                vStringDelete( tmp );
+            }
+
             /* Skipping invalid event handlers */
             cp = skipSpace( cp );
             if( *cp != ',' )
@@ -193,6 +205,7 @@ static void findKVIrcTags (void)
             ++cp;
             cp = skipSpace( cp );
             cp = parseIdentifier( cp, handlerName, FALSE );
+
 
             /* If a handler of the event type hasn't been registered
              * already, adding the parent node */
