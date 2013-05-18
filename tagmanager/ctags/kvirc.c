@@ -129,6 +129,10 @@ static void findKVIrcTags (void)
                 cp += 2;
                 cp = parseIdentifier( cp, aliasName, TRUE );
 
+                /* Hack to stop geany using inappropriate parents in
+                 * scoped tags - aliases have one space appended */
+                vStringCatS( name, " " );
+
                 /* If the alias namespace hasn't been registered already,
                  * adding */
                 if ( !stringListHas( seenAliasNamespaces,
@@ -177,8 +181,8 @@ static void findKVIrcTags (void)
             cp = parseIdentifier( cp, name, FALSE );
 
             /* Hack to stop geany using inappropriate parents in scoped
-             * tags - events have one space appended */
-            vStringCatS( name, " " );
+             * tags - events have two spaces appended */
+            vStringCatS( name, "  " );
 
             /* Skipping invalid event handlers */
             cp = skipSpace( cp );
@@ -224,8 +228,8 @@ static void findKVIrcTags (void)
             cp = parseIdentifier( cp, name, FALSE );
 
             /* Hack to stop geany using inappropriate parents in scoped
-             * tags - variables have two spaces appended */
-            vStringCatS( name, "  " );
+             * tags - variables have three spaces appended */
+            vStringCatS( name, "   " );
 
             /* If an assignment to the global variable hasn't been
              * registered already, adding */
