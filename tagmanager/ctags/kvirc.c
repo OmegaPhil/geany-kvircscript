@@ -176,6 +176,10 @@ static void findKVIrcTags (void)
             cp += 6;
             cp = parseIdentifier( cp, name, FALSE );
 
+            /* Hack to stop geany using inappropriate parents in scoped
+             * tags - events have one space appended */
+            vStringCatS( name, " " );
+
             /* Skipping invalid event handlers */
             cp = skipSpace( cp );
             if( *cp != ',' )
@@ -218,6 +222,10 @@ static void findKVIrcTags (void)
              * is moved on as appropriate */
             ++cp;
             cp = parseIdentifier( cp, name, FALSE );
+
+            /* Hack to stop geany using inappropriate parents in scoped
+             * tags - variables have two spaces appended */
+            vStringCatS( name, "  " );
 
             /* If an assignment to the global variable hasn't been
              * registered already, adding */
