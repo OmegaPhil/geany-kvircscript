@@ -36,7 +36,7 @@ typedef enum {
 static kindOption KVIrcKinds[] = {
     {TRUE, 'a', "function", "alias"},
     {TRUE, 'e', "namespace", "event"},
-    {TRUE, 'v', "variable", "variables"}
+    {TRUE, 'v', "variable", "variable"}
 };
 
 /*
@@ -141,7 +141,11 @@ static void findKVIrcTags (void)
 
                 /* Registering 'scoped' alias under its namespace */
                 makeSimpleScopedTag( aliasName, KVIrcKinds, K_ALIAS,
-                                     "alias", vStringValue( name ), NULL );
+                                     "function", vStringValue( name ), NULL );
+
+                /* Debug code */
+                /*printf( "Registered alias: Namespace: %s, name: %s\n",
+                            vStringValue( name ), vStringValue( aliasName ) );*/
 
                 /* Clearing up */
                 vStringClear( aliasName );
@@ -150,10 +154,10 @@ static void findKVIrcTags (void)
             {
                 /* No namespace detected - registering plain alias */
                 makeSimpleTag( name, KVIrcKinds, K_ALIAS );
-            }
 
-            /* Debug code */
-            //printf( "Registered alias: %s\n", vStringValue( name ) );
+                /* Debug code */
+                //printf( "Registered alias: %s\n", vStringValue( name ) );
+            }
 
             /* Clearing up */
             vStringClear( name );
@@ -192,7 +196,7 @@ static void findKVIrcTags (void)
 
             /* Registering 'scoped' event handler - since you can have
              * many handlers for the same event */
-            makeSimpleScopedTag( handlerName, KVIrcKinds, K_EVENT, "event",
+            makeSimpleScopedTag( handlerName, KVIrcKinds, K_EVENT, "namespace",
                                  vStringValue( name ), NULL );
 
             /* Debug code */
