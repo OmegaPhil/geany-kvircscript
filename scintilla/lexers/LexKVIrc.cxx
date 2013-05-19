@@ -78,11 +78,14 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                  * its length...
                  * Going for a compromise where single line comments not
                  * starting on a newline are only allowed when they are
-                 * preceeded and succeeded by a space
+                 * preceeded and succeeded by a space, with the special
+                 * case of allowing geany's commenting style ('#~')
                  */
                 if (
                     (sc.ch == '#' && sc.atLineStart) ||
-                    (sc.ch == '#' && sc.chPrev == ' ' && sc.chNext == ' ')
+                    (sc.ch == '#' && sc.chPrev == ' ' &&
+                        (sc.chNext == ' ' || sc.chNext == '~')
+                    )
                 )
                 {
                     sc.SetState(SCE_KVIRC_COMMENT);
