@@ -29,14 +29,16 @@
 typedef enum {
     K_ALIAS,
     K_EVENT,
-    K_VARIABLE
+    K_GLOBAL_VARIABLE,
+    K_EXTENDED_SCOPE_VARIABLE
 } kvircKind;
 
 /* Based on s_tag_type_names values from tm_tag.c */
 static kindOption KVIrcKinds[] = {
     {TRUE, 'a', "function", "alias"},
     {TRUE, 'e', "namespace", "event"},
-    {TRUE, 'v', "variable", "variable"}
+    {TRUE, 'v', "variable", "global variable"},
+    {TRUE, 'x', "member", "extended scope variable"}
 };
 
 /*
@@ -81,16 +83,17 @@ static void findKVIrcTags (void)
     vString *name = vStringNew ();
     vString *const aliasName = vStringNew ();
     vString *const handlerName = vStringNew ();
-    vString *const marker = vStringNewInit ( "*" );  // Used for global variables
+    vString *const marker = vStringNewInit ( "*" );  // Used for variable types
 
     /* String list to record where events have been come across and
      * therefore already added to the list
      * String list is also used in js.c */
     stringList* seenEvents = stringListNew();
 
-    /* Same for alias namespaces and global variables*/
+    /* Same for alias namespaces and variables */
     stringList* seenAliasNamespaces = stringListNew();
     stringList* seenGlobalVariables = stringListNew();
+    stringList* seenExtendedScopeVariables = stringListNew();
 
     /* Looping for all lines */
     const char *line;
@@ -249,16 +252,56 @@ static void findKVIrcTags (void)
             if ( !stringListHas( seenGlobalVariables, vStringValue( name ) ))
             {
                 stringListAdd( seenGlobalVariables, vStringNewCopy( name ) );
-                makeSimpleTag( name, KVIrcKinds, K_VARIABLE );
+                makeSimpleTag( name, KVIrcKinds, K_GLOBAL_VARIABLE );
             }
 
             /* Registering this instance of assignment to the global
              * variable - text is just '*' as its just a marker */
-            makeSimpleScopedTag( marker, KVIrcKinds, K_VARIABLE, "variable",
+            makeSimpleScopedTag( marker, KVIrcKinds, K_GLOBAL_VARIABLE, "variable",
                                  vStringValue( name ), NULL );
 
             /* Debug code */
-            //printf( "Registered variable: %s\n", vStringValue( name ) );
+            /*printf( "Registered global variable: %s\n",
+                      vStringValue( name ) );*/
+
+            /* Clearing up */
+            vStringClear( name );
+
+            /* Moving to next line */
+            continue;
+        }
+
+        /* Detecting assumed assignments to extended scope variables */
+        if( strncmp( cp, "%:", 2) == 0 )
+        {
+            /* Obtaining the variable name from the next identifier - cp
+             * is moved on as appropriate */
+            cp += 2;
+            cp = parseIdentifier( cp, name, FALSE );
+
+            /* Hack to stop geany using inappropriate parents in scoped
+             * tags - extended scope variables have four spaces appended */
+            vStringCatS( name, "    " );
+
+            /* If an assignment to the extended scope variable hasn't
+             * been registered already, adding */
+            if ( !stringListHas( seenExtendedScopeVariables,
+                 vStringValue( name ) ))
+            {
+                stringListAdd( seenExtendedScopeVariables,
+                               vStringNewCopy( name ) );
+                makeSimpleTag( name, KVIrcKinds, K_EXTENDED_SCOPE_VARIABLE );
+            }
+
+            /* Registering this instance of assignment to the extended
+             * scope variable - text is just '*' as its just a marker */
+            makeSimpleScopedTag( marker, KVIrcKinds,
+                                 K_EXTENDED_SCOPE_VARIABLE, "member",
+                                 vStringValue( name ), NULL );
+
+            /* Debug code */
+            /*printf( "Registered extended scope variable: %s\n",
+                      vStringValue( name ) );*/
 
             /* Clearing up */
             vStringClear( name );
@@ -276,6 +319,7 @@ static void findKVIrcTags (void)
     stringListDelete( seenAliasNamespaces );
     stringListDelete( seenEvents );
     stringListDelete( seenGlobalVariables );
+    stringListDelete( seenExtendedScopeVariables );
 }
 
 extern parserDefinition *KVIrcParser (void)
