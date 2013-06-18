@@ -36,8 +36,10 @@ using namespace Scintilla;
 /* Utility functions */
 static inline bool IsAWordChar(int ch) {
 
-    /* Keyword list includes modules, i.e. words including '.' */
-    return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.');
+    /* Keyword list includes modules, i.e. words including '.', and
+     * alias namespaces include ':' */
+    return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.'
+            || ch == ':');
 }
 static inline bool IsAWordStart(int ch) {
 
