@@ -818,7 +818,9 @@ static const HLStyle highlighting_styles_KVIRC[] =
 	{ SCE_KVIRC_FUNCTION,	"type",				FALSE },
 	{ SCE_KVIRC_VARIABLE,	"identifier",		FALSE },
 	{ SCE_KVIRC_NUMBER,		"number",			FALSE },
-	{ SCE_KVIRC_OPERATOR,	"operator",			FALSE }
+	{ SCE_KVIRC_OPERATOR,	"operator",			FALSE },
+	{ SCE_KVIRC_STRING_FUNCTION,"type",			FALSE },
+	{ SCE_KVIRC_STRING_VARIABLE,"identifier",	FALSE }
 };
 static const HLKeyword highlighting_keywords_KVIRC[] =
 {

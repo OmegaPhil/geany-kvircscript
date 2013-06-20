@@ -199,6 +199,29 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     break;
                 }
 
+                /* Functions and variables are now highlighted in strings
+                 * Detecting functions */
+                if (sc.ch == '$')
+                {
+                    /* Allowing escaped functions to pass */
+                    if (sc.chPrev == '\\')
+                        break;
+
+                    sc.SetState(SCE_KVIRC_STRING_FUNCTION);
+                    break;
+                }
+
+                /* Detecting variables */
+                if (sc.ch == '%')
+                {
+                    /* Allowing escaped variables to pass */
+                    if (sc.chPrev == '\\')
+                        break;
+
+                    sc.SetState(SCE_KVIRC_STRING_VARIABLE);
+                    break;
+                }
+
                 /* Breaking out of a string when a newline is introduced */
                 if (sc.ch == '\r' || sc.ch == '\n')
                 {
@@ -219,6 +242,24 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                 if (!IsAWordChar(sc.ch))
                 {
                     sc.SetState(SCE_KVIRC_DEFAULT);
+
+                    /* Word has been exited yet the current character
+                     * has yet to be defined - loop without moving
+                     * forward again */
+                    next = false;
+                    break;
+                }
+
+                break;
+
+            case SCE_KVIRC_STRING_FUNCTION:
+            case SCE_KVIRC_STRING_VARIABLE:
+
+                /* A function or variable in a string
+                 * Detecting the end of a function/variable (word) */
+                if (!IsAWordChar(sc.ch))
+                {
+                    sc.SetState(SCE_KVIRC_STRING);
 
                     /* Word has been exited yet the current character
                      * has yet to be defined - loop without moving
