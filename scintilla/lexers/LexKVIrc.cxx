@@ -433,6 +433,13 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
                 /* Updating variables */
                 ++currentLine;
                 currentLevel = nextLevel;
+
+                /* Dealing with problematic Windows newlines -
+                 * incrementing to avoid the extra newline breaking the
+                 * fold point */
+                if (styler.SafeGetCharAt(i) == '\r' &&
+                    styler.SafeGetCharAt(i + 1) == '\n')
+                    ++i;
                 break;
         }
     }
