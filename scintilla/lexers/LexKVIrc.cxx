@@ -125,8 +125,9 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                     break;
                 }
 
-                /* Detecting numbers */
-                if (isdigit(sc.ch))
+                /* Detecting numbers - isdigit is unsafe as it does not
+                 * validate, use CharacterSet.h functions */
+                if (IsADigit(sc.ch))
                 {
                     sc.SetState(SCE_KVIRC_NUMBER);
                     break;
@@ -276,7 +277,7 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
             case SCE_KVIRC_NUMBER:
 
                 /* Detecting the end of a number */
-                if (!isdigit(sc.ch))
+                if (!IsADigit(sc.ch))
                 {
                     sc.SetState(SCE_KVIRC_DEFAULT);
 
