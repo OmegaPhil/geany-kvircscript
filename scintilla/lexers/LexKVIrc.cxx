@@ -314,8 +314,8 @@ static void ColouriseKVIrcDoc(unsigned int startPos, int length,
                      * the keyword list */
                     char s[100];
                     int wordLen = sc.currentPos - styler.GetStartSegment();
-                    if (wordLen > 100)
-                        wordLen = 100;
+                    if (wordLen > 99)
+                        wordLen = 99;  /* Include '\0' in buffer */
                     int i;
                     for( i = 0; i < wordLen; ++i )
                     {
